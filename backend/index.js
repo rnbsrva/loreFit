@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const path = require("path");
 const { pool } = require("./db/pool");
 const { runMigrations } = require("./db/migrate");
 
@@ -930,6 +931,12 @@ app.delete("/api/account", requireAuth, async (req, res) => {
     console.error("Account delete error:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
+});
+
+const frontendDist = path.join(__dirname, "../frontend/dist");
+app.use(express.static(frontendDist));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(frontendDist, "index.html"));
 });
 
 runMigrations()
