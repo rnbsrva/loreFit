@@ -935,7 +935,7 @@ app.delete("/api/account", requireAuth, async (req, res) => {
 
 const frontendDist = path.join(__dirname, "../frontend/dist");
 app.use(express.static(frontendDist));
-app.get("/{*splat}", (req, res) => {  
+app.use((req, res) => { 
   res.sendFile(path.join(frontendDist, "index.html"));
 });
 
